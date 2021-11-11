@@ -1,3 +1,4 @@
+import collections
 
 class BinaryTreeSolutions():
     def __init___():
@@ -98,6 +99,72 @@ class BinaryTreeSolutions():
         
         return ans
 
+    def findPaths(self, root):
+        '''
+        return all paths to leaf nodes
+        '''
+        path, paths = [], []
+        def helper(node, path ,paths):
+
+            path.append(str(node.val))
+            if node.left is None and node.right is None:
+                paths.append('->'.join(path))
+                return
+
+            if node.left:
+                helper(node.left, path, paths)
+                path.pop()
+            
+            if node.right:
+                helper(node.right, path, paths)
+                path.pop()
+
+        helper(root, path, paths)
+        return paths
+
+    def treeBFS(self, root):
+        '''
+        standard way to do Breadth First Search to binary tree
+        '''
+
+        queue = collections.deque([root])
+        ans = []
+
+        while queue:
+            ans.append([node.val for node in queue]) # append nodes on this level
+            for _ in range(len(queue)):
+                node = queue.popleft()
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+        
+        return ans
+
+    def treeDummyNodeBFS(self, root):
+        '''
+        BFS using dummy node to seperate levels
+        '''
+        queue = collections.deque([root, None])
+        ans = []
+
+        while queue:
+            node = queue.popleft()
+            if node is None:
+                continue
+            ans.append(node.val)
+
+            if node.left:
+                queue.append(node.left)
+            if node.right:
+                queue.append(node.right)
+
+            if queue[0] is None and not queue[-1] is None:
+                queue.append(None)
+
+        return ans            
+            
+            
 
 
 
